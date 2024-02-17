@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Streaming</title>
+</head>
+<body>
+    <video id="localVideo" autoplay></video>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                const videoElement = document.getElementById('localVideo');
+                videoElement.srcObject = stream;
+
+                // Send the stream to the server
+                socket.emit('stream', stream);
+            })
+            .catch(error => {
+                console.error('Error accessing camera:', error);
+            });
+
+        socket.on('stream', stream => {
+            // Handle received stream from other clients (if necessary)
+        });
+    </script>
+</body>
+</html>
