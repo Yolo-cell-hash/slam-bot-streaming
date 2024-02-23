@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+<!-- receiver.ejs -->
+
+<body>
+    <h1>Video Receiver</h1>
+    <video id="videoElement" autoplay></video>
+
+    <script>
+        const video = document.getElementById('videoElement');
+
+        // Set up WebSocket connection
+        const ws = new WebSocket('ws://192.168.1.101:3000');
+
+        // Listen for WebSocket messages
+        ws.onmessage = function(event) {
+            const imageData = event.data;
+            displayFrame(imageData);
+        };
+
+        // Function to display frames
+        function displayFrame(imageData) {
+            const img = new Image();
+            img.onload = function() {
+                video.src = img.src;
+            };
+            img.src = imageData;
+        }
+    </script>
+</body>
+
+<%- include('partials/footer') %>

@@ -1,11 +1,11 @@
 <%- include('partials/header') %>
-<body>
+<!-- <body>
     <h1>Camera Feed</h1>
     <video id="videoElement" autoplay></video>
     
     <script>
         const video = document.getElementById('videoElement');
-        const ws = new WebSocket('ws://YOUR_SERVER_IP_ADDRESS:3000'); // Update with your server IP
+        const ws = new WebSocket('ws://192.168.1.101:3000'); // Update with your server IP
 
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function(stream) {
@@ -24,6 +24,50 @@
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             const imageData = canvas.toDataURL('image/jpeg'); // Convert frame to base64 JPEG
             ws.send(imageData); // Send frame to server
+        }c
+    </script>
+</body> -->
+
+
+<body>
+    <h1>Camera Feed</h1>
+    <button id="startButton">Start Camera</button>
+    <video id="videoElement" style="display: none;" autoplay></video>
+
+    <script>
+        const startButton = document.getElementById('startButton');
+        const video = document.getElementById('videoElement');
+        let stream;
+
+        startButton.addEventListener('click', () => {
+            startCamera();
+        });
+
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (videoStream) {
+                    stream = videoStream;
+                    video.srcObject = stream;
+                    video.style.display = 'block';
+                    setInterval(() => captureFrame(), 1000); // Capture frame every second
+                    startButton.disabled = true; // Disable button after starting camera
+                })
+                .catch(function (err) {
+                    console.log('Error accessing the camera:', err);
+                });
+        }
+
+        function captureFrame() {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/jpeg'); // Convert frame to base64 JPEG
+            // Check if stream is active before sending frame
+            if (stream.active) {
+                ws.send(imageData); // Send frame to server
+            }
         }
     </script>
 </body>
