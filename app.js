@@ -2,11 +2,15 @@ const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
 const fs = require('fs');
+const io = require('socket.io')(http); // Initialize Socket.IO
+
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+const socketio = require('socket.io')(server);
 const server_ip = '192.168.1.101';
+let receivedFrameData = null;
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -22,7 +26,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/receiver', function(req, res) {
-    res.render('receiver');
+    res.render('receiver', { imageData: receivedFrameData });
 });
 
 app.post('/', function (req, res) {
@@ -41,23 +45,37 @@ app.post('/', function (req, res) {
     }
 });
 
-function saveFrame(imageData) {
-    const buffer = Buffer.from(imageData.replace(/^data:image\/\w+;base64,/, ''), 'base64');
-    fs.writeFile('frame.jpg', buffer, (err) => {
-        if (err) {
-            console.error('Error saving frame:', err);
-        } else {
-            console.log('Frame saved successfully');
-        }
-    });
-}
+// WebSocket connection handling
+// wss.on('connection', function connection(ws) {
+//     console.log('Client connected.');
+
+//     ws.on('message', function incoming(imageData) {
+//         console.log('Received frame from client.');
+//         // Here you can handle the received frame data
+//         // For example, you can save it to a file, process it, or broadcast it to other clients
+//         // For simplicity, let's just log the received message
+//         console.log(imageData);
+//         io.emit('frame', imageData);
+
+//     });
+
+//     ws.on('close', function close() {
+//         console.log('Client disconnected.');
+//     });
+// });
 
 wss.on('connection', function connection(ws) {
-    console.log('Client connected');
+    console.log('Client connected.');
 
-    ws.on('message', function incoming(data) {
-        // Process received frame (e.g., save to file)
-        saveFrame(data);
+    ws.on('message', function incoming(imageData) {
+        console.log('Received frame from client.');
+        console.log(imageData);
+        receivedFrameData = imageData;
+        socketio.emit('frame', imageData); // Emit the frame data using Socket.IO
+    });
+
+    ws.on('close', function close() {
+        console.log('Client disconnected.');
     });
 });
 

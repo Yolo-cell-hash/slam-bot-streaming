@@ -1,31 +1,34 @@
-<%- include('partials/header') %>
-<!-- receiver.ejs -->
 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0.4">
+    <title>SLAM-BOT</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
 <body>
-    <h1>Video Receiver</h1>
-    <video id="videoElement" autoplay></video>
-
+    <h1>Receiver</h1>
+    <img id="videoFrame" src="<%= imageData %>" alt="Received Frame">
+    
     <script>
-        const video = document.getElementById('videoElement');
-
-        // Set up WebSocket connection
-        const ws = new WebSocket('ws://192.168.1.101:3000');
-
-        // Listen for WebSocket messages
-        ws.onmessage = function(event) {
-            const imageData = event.data;
-            displayFrame(imageData);
-        };
-
-        // Function to display frames
-        function displayFrame(imageData) {
-            const img = new Image();
-            img.onload = function() {
-                video.src = img.src;
-            };
-            img.src = imageData;
+        // Function to update the image source with new frame data
+        function updateFrame(imageData) {
+            document.getElementById('videoFrame').src = imageData;
         }
+
+        // Function to fetch and update frame data every 1 second
+        function refreshFrame() {
+            // WebSocket or Socket.IO connection code
+            // Listen for 'frame' events from the server
+            socket.on('frame', function(imageData) {
+                // Update the image source with the new frame data
+                updateFrame(imageData);
+            });
+        }
+
     </script>
 </body>
+</html>
 
-<%- include('partials/footer') %>
+
+

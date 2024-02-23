@@ -1,33 +1,8 @@
 <%- include('partials/header') %>
-<!-- <body>
-    <h1>Camera Feed</h1>
-    <video id="videoElement" autoplay></video>
-    
-    <script>
-        const video = document.getElementById('videoElement');
-        const ws = new WebSocket('ws://192.168.1.101:3000'); // Update with your server IP
 
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function(stream) {
-                video.srcObject = stream;
-                setInterval(() => captureFrame(), 1000); // Capture frame every second
-            })
-            .catch(function(err) {
-                console.log('Error accessing the camera:', err);
-            });
+<!-- home.ejs -->
 
-        function captureFrame() {
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const imageData = canvas.toDataURL('image/jpeg'); // Convert frame to base64 JPEG
-            ws.send(imageData); // Send frame to server
-        }c
-    </script>
-</body> -->
-
+<!-- home.ejs -->
 
 <body>
     <h1>Camera Feed</h1>
@@ -38,6 +13,7 @@
         const startButton = document.getElementById('startButton');
         const video = document.getElementById('videoElement');
         let stream;
+        let ws;
 
         startButton.addEventListener('click', () => {
             startCamera();
@@ -49,6 +25,10 @@
                     stream = videoStream;
                     video.srcObject = stream;
                     video.style.display = 'block';
+                    ws = new WebSocket('ws://192.168.1.101:3000'); // Establish WebSocket connection
+                    ws.onopen = () => {
+                        console.log('WebSocket connection established');
+                    };
                     setInterval(() => captureFrame(), 1000); // Capture frame every second
                     startButton.disabled = true; // Disable button after starting camera
                 })
@@ -66,12 +46,16 @@
             const imageData = canvas.toDataURL('image/jpeg'); // Convert frame to base64 JPEG
             // Check if stream is active before sending frame
             if (stream.active) {
-                ws.send(imageData); // Send frame to server
+                console.log('Sending frame to server:', imageData); // Log frame data
+                if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(imageData); // Send frame to server
+                } else {
+                    console.log('WebSocket connection not open.');
+                }
             }
         }
     </script>
 </body>
-
 
 
 <%- include('partials/footer') %>
