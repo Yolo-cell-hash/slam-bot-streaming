@@ -1,26 +1,33 @@
 <%- include('partials/header') %>
 <body>
-    <video id="localVideo" autoplay></video>
-
-    <script src="/socket.io/socket.io.js"></script>
+    <h1>Camera Feed</h1>
+    <video id="videoElement" autoplay></video>
+    
     <script>
-        const socket = io();
+        const video = document.getElementById('videoElement');
+        const ws = new WebSocket('ws://YOUR_SERVER_IP_ADDRESS:3000'); // Update with your server IP
 
         navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                const videoElement = document.getElementById('localVideo');
-                videoElement.srcObject = stream;
-
-                // Send the stream to the server
-                socket.emit('stream', stream);
+            .then(function(stream) {
+                video.srcObject = stream;
+                setInterval(() => captureFrame(), 1000); // Capture frame every second
             })
-            .catch(error => {
-                console.error('Error accessing camera:', error);
+            .catch(function(err) {
+                console.log('Error accessing the camera:', err);
             });
 
-        socket.on('stream', stream => {
-            // Handle received stream from other clients (if necessary)
-        });
+        function captureFrame() {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/jpeg'); // Convert frame to base64 JPEG
+            ws.send(imageData); // Send frame to server
+        }
     </script>
 </body>
+
+
+
 <%- include('partials/footer') %>
