@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
+const path = require('path');
 const fs = require('fs');
 const io = require('socket.io')(http); // Initialize Socket.IO
 
@@ -9,8 +10,9 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const socketio = require('socket.io')(server);
-const server_ip = '192.168.1.101';
+const server_ip = '192.168.1.100';
 let receivedFrameData = null;
+
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -29,6 +31,10 @@ app.get('/receiver', function(req, res) {
     res.render('receiver', { imageData: receivedFrameData });
 });
 
+
+
+
+
 app.post('/', function (req, res) {
     const username = req.body.username;
     const password = req.body.pass;
@@ -45,18 +51,18 @@ app.post('/', function (req, res) {
     }
 });
 
-// WebSocket connection handling
+
 // wss.on('connection', function connection(ws) {
 //     console.log('Client connected.');
 
 //     ws.on('message', function incoming(imageData) {
 //         console.log('Received frame from client.');
-//         // Here you can handle the received frame data
-//         // For example, you can save it to a file, process it, or broadcast it to other clients
-//         // For simplicity, let's just log the received message
 //         console.log(imageData);
-//         io.emit('frame', imageData);
+//         receivedFrameData = imageData;
 
+        
+        
+//         socketio.emit('frame', imageData); // Emit the frame data using Socket.IO
 //     });
 
 //     ws.on('close', function close() {
@@ -64,13 +70,21 @@ app.post('/', function (req, res) {
 //     });
 // });
 
+
+// In your server code
+
+
+
 wss.on('connection', function connection(ws) {
     console.log('Client connected.');
 
     ws.on('message', function incoming(imageData) {
-        console.log('Received frame from client.');
-        console.log(imageData);
+        //console.log('Received frame from client.');
+        //console.log(imageData);
         receivedFrameData = imageData;
+
+        
+        
         socketio.emit('frame', imageData); // Emit the frame data using Socket.IO
     });
 
@@ -78,6 +92,9 @@ wss.on('connection', function connection(ws) {
         console.log('Client disconnected.');
     });
 });
+
+
+
 
 
 

@@ -2,33 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0.4">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <!-- <meta http-equiv="refresh" content="0.4"> -->
     <title>SLAM-BOT</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <h1>Receiver</h1>
-    <img id="videoFrame" src="<%= imageData %>" alt="Received Frame">
+   <h1>Camera Feed</h1>
+   <div id="here">
+        <img src="<%= imageData %>" alt="frame">
+
+    </div>
     
-    <script>
-        // Function to update the image source with new frame data
-        function updateFrame(imageData) {
-            document.getElementById('videoFrame').src = imageData;
-        }
 
-        // Function to fetch and update frame data every 1 second
-        function refreshFrame() {
-            // WebSocket or Socket.IO connection code
-            // Listen for 'frame' events from the server
-            socket.on('frame', function(imageData) {
-                // Update the image source with the new frame data
-                updateFrame(imageData);
-            });
-        }
+<script>
+    function updateDiv()
+{ 
+    $( "#here" ).load(window.location.href + " #here" );
 
-    </script>
+}
+setInterval(updateDiv, 100);
+
+</script>
+
 </body>
 </html>
+
 
 
 
