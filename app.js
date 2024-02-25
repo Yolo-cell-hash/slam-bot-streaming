@@ -3,14 +3,14 @@ const http = require('http');
 const WebSocket = require('ws');
 const path = require('path');
 const fs = require('fs');
-const io = require('socket.io')(http); // Initialize Socket.IO
+const io = require('socket.io')(http);
 
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const socketio = require('socket.io')(server);
-const server_ip = '192.168.1.100';
+const server_ip = '192.168.238.205';
 let receivedFrameData = null;
 
 
@@ -31,10 +31,6 @@ app.get('/receiver', function(req, res) {
     res.render('receiver', { imageData: receivedFrameData });
 });
 
-
-
-
-
 app.post('/', function (req, res) {
     const username = req.body.username;
     const password = req.body.pass;
@@ -51,30 +47,6 @@ app.post('/', function (req, res) {
     }
 });
 
-
-// wss.on('connection', function connection(ws) {
-//     console.log('Client connected.');
-
-//     ws.on('message', function incoming(imageData) {
-//         console.log('Received frame from client.');
-//         console.log(imageData);
-//         receivedFrameData = imageData;
-
-        
-        
-//         socketio.emit('frame', imageData); // Emit the frame data using Socket.IO
-//     });
-
-//     ws.on('close', function close() {
-//         console.log('Client disconnected.');
-//     });
-// });
-
-
-// In your server code
-
-
-
 wss.on('connection', function connection(ws) {
     console.log('Client connected.');
 
@@ -85,18 +57,13 @@ wss.on('connection', function connection(ws) {
 
         
         
-        socketio.emit('frame', imageData); // Emit the frame data using Socket.IO
+        socketio.emit('frame', imageData);
     });
 
     ws.on('close', function close() {
         console.log('Client disconnected.');
     });
 });
-
-
-
-
-
 
 const PORT = process.env.PORT || 3000;
 

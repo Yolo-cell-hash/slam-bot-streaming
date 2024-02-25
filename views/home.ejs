@@ -22,11 +22,11 @@
                     stream = videoStream;
                     video.srcObject = stream;
                     video.style.display = 'block';
-                    ws = new WebSocket('ws://192.168.1.100:3000'); // Establish WebSocket connection
+                    ws = new WebSocket('ws://192.168.238.205:3000'); // Establish WebSocket connection
                     ws.onopen = () => {
                         console.log('WebSocket connection established');
                     };
-                    setInterval(() => captureFrame(), 1000); // Capture frame every second
+                    setInterval(() => captureFrame(), 100); // Capture frame every second
                     startButton.disabled = true; // Disable button after starting camera
                 })
                 .catch(function (err) {
@@ -42,7 +42,7 @@
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             const imageData = canvas.toDataURL('image/jpeg'); // Convert frame to base64 JPEG
             const frameName = 'Frame_' + Date.now()+ '.jpeg';
-            // Check if stream is active before sending frame
+
             if (stream.active) {
                 console.log('Sending frame to server:', imageData); // Log frame data
                 if (ws.readyState === WebSocket.OPEN) {
