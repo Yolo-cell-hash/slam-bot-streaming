@@ -22,7 +22,7 @@
                     stream = videoStream;
                     video.srcObject = stream;
                     video.style.display = 'block';
-                    ws = new WebSocket('ws://192.168.238.205:3000'); // Establish WebSocket connection
+                    ws = new WebSocket('ws://192.168.1.101:3000'); // Establish WebSocket connection
                     ws.onopen = () => {
                         console.log('WebSocket connection established');
                     };
