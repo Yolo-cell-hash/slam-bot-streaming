@@ -11,6 +11,7 @@ const wss = new WebSocket.Server({ server });
 const socketio = require("socket.io")(server);
 const server_ip = "192.168.1.101";
 let receivedFrameData = null;
+let numbersData=[];
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -25,10 +26,23 @@ app.get("/", function (req, res) {
   res.render("login");
 });
 
+// app.get("/receiver", function (req, res) {
+//   numbersData = generateNumbersData();
+//   res.render("receiver", { imageData: receivedFrameData })
+//   console.log(numbersData);
+// });
+
+
 app.get("/receiver", function (req, res) {
-  var numbersData = generateNumbersData();
-  res.render("receiver", { imageData: receivedFrameData },)
+  try {
+    const numbersData = generateNumbersData();
+    res.render("receiver", { imageData: receivedFrameData, numbersData: numbersData });
+  } catch (error) {
+    console.error("Error rendering template:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
+
 
 function generateNumbersData() {
   const numbersData = [];
