@@ -9,9 +9,16 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const socketio = require("socket.io")(server);
-const server_ip = "192.168.1.101";
+const server_ip = "192.168.1.100";
 let receivedFrameData = null;
 let numbersData=[];
+
+let image_path= '/images/mountain.jpeg';
+
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  next();
+});
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -35,8 +42,12 @@ app.get("/", function (req, res) {
 
 app.get("/receiver", function (req, res) {
   try {
+
+
+
+
     const numbersData = generateNumbersData();
-    res.render("receiver", { imageData: receivedFrameData, numbersData: numbersData });
+    res.render("receiver", { imageData: receivedFrameData, numbersData: numbersData , image_path: image_path});
   } catch (error) {
     console.error("Error rendering template:", error);
     res.status(500).send("Internal Server Error");

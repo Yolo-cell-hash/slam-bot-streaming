@@ -9,6 +9,7 @@
 
     <title>SLAM-BOT</title>
     <link rel="stylesheet" href="/styles.css">
+
 </head>
 <body>
 
@@ -20,6 +21,45 @@
     <div id="also_here">
         <canvas id="radar-chart"></canvas>
     </div>
+
+
+    <div id="there">
+        <img height="400px" width="400px" id="image" src="<%=image_path %>" alt="Image" style="display: none;">
+        <button id="toggleButton">Show Map</button>
+    </div>
+    <button id="updateButton">Update Map</button>
+
+      
+      
+    <script>
+        $(document).ready(function() {
+    $('#toggleButton').click(function() {
+        $('#image').toggle();
+    });
+    });
+
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var image = document.getElementById("image");
+            var updateButton = document.getElementById("updateButton");
+            var cooldownInProgress = false;
+    
+            updateButton.addEventListener("click", function() {
+                if (!cooldownInProgress) {
+                    cooldownInProgress = true;    
+                    updateButton.disabled = true;    
+                    image.src = '<%=image_path %>';
+                        setTimeout(function() {
+                        updateButton.disabled = false;
+                        cooldownInProgress = false; 
+                    }, 15000);
+                }
+            });
+        });
+    </script>
+    
 
     <script>
     const formattedData = <%- JSON.stringify(numbersData.map(point => ({ label: point.number + '°', value: point.randomNumber })) ) %>;
@@ -38,7 +78,7 @@
             },
         });
     </script>
- 
+
 
     <script>
         function updateDiv()
