@@ -10,7 +10,7 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const socketio = require("socket.io")(server);
-const server_ip = "192.168.1.100";
+const server_ip = "192.168.0.109";
 let receivedFrameData = null;
 let numbersData=[];
 
