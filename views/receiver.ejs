@@ -24,7 +24,7 @@
 
 
     <div id="there">
-        <img height="400px" width="400px" id="image" src="<%=image_path %>" alt="Image" style="display: none;">
+        <img height="400px" width="400px" id="image" src="<%=img_path %>" alt="Image" style="display: none;">
         <button id="toggleButton">Show Map</button>
     </div>
     <button id="updateButton">Update Map</button>
@@ -50,7 +50,7 @@
                 if (!cooldownInProgress) {
                     cooldownInProgress = true;    
                     updateButton.disabled = true;    
-                    image.src = '<%=image_path %>';
+                    image.src = '<%=img_path %>';
                         setTimeout(function() {
                         updateButton.disabled = false;
                         cooldownInProgress = false; 

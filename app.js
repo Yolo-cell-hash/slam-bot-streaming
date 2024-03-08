@@ -4,6 +4,7 @@ const WebSocket = require("ws");
 const path = require("path");
 const fs = require("fs");
 const io = require("socket.io")(http);
+const sharp = require("sharp");
 
 const app = express();
 const server = http.createServer(app);
@@ -13,7 +14,23 @@ const server_ip = "192.168.1.100";
 let receivedFrameData = null;
 let numbersData=[];
 
-let image_path= '/images/mountain.jpeg';
+let image_path= './room.pgm';
+let convertedImagePath='./public/images/room.jpg';
+
+let img_path='/images/room.jpg';
+
+
+// Convert .pgm image to JPEG
+sharp(image_path)
+  .jpeg() // Convert to JPEG format
+  .toFile(convertedImagePath, (err, info) => {
+    if (err) {
+      console.error("Error converting image:", err);
+    } else {
+      console.log("Image converted successfully:", info);
+    }
+  });
+
 
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -33,21 +50,11 @@ app.get("/", function (req, res) {
   res.render("login");
 });
 
-// app.get("/receiver", function (req, res) {
-//   numbersData = generateNumbersData();
-//   res.render("receiver", { imageData: receivedFrameData })
-//   console.log(numbersData);
-// });
-
 
 app.get("/receiver", function (req, res) {
   try {
-
-
-
-
     const numbersData = generateNumbersData();
-    res.render("receiver", { imageData: receivedFrameData, numbersData: numbersData , image_path: image_path});
+    res.render("receiver", { imageData: receivedFrameData, numbersData: numbersData , img_path: img_path});
   } catch (error) {
     console.error("Error rendering template:", error);
     res.status(500).send("Internal Server Error");
