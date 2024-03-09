@@ -10,6 +10,19 @@
     <title>SLAM-BOT</title>
     <link rel="stylesheet" href="/styles.css">
 
+    <style>
+        /* Styles for the points */
+        .point {
+          position: absolute;
+          width: 10px; /* Adjust size as needed */
+          height: 10px; /* Adjust size as needed */
+          background-color: red; /* Adjust color as needed */
+          color: blue;
+          border-radius: 50%; /* To make it round */
+          z-index: 1000;
+        }
+      </style>
+
 </head>
 <body>
 
@@ -18,18 +31,119 @@
         <img src="<%= imageData %>" alt="frame">
     </div>
     
-    <div id="also_here">
+    <!-- <div id="also_here">
         <canvas id="radar-chart"></canvas>
-    </div>
+    </div> -->
 
 
     <div id="there">
-        <img height="400px" width="400px" id="image" src="<%=img_path %>" alt="Image" style="display: none;">
+        <img height="400px" width="700px" id="image" src="<%=img_path%>" alt="Image" style="display: none;">
         <button id="toggleButton">Show Map</button>
     </div>
     <button id="updateButton">Update Map</button>
 
+   
       
+
+        <h4>Shortest Path</h4>
+
+        <div id="pointsContainer" style="z-index: 999; position: relative;">
+            <img height="400px" width="700px" id="img" src="<%= img_path%>" alt="Image"   style="z-index: 100">
+            <button onclick="saveImage()">Save Image</button> 
+
+            
+        </div>
+
+
+
+
+
+       
+
+        
+
+        <script>
+            // Function to handle click events on the image
+            function handleImageClick(event) {
+              console.log("Image clicked");
+              // Get the click coordinates relative to the image
+              const image = document.getElementById('img');
+              const rect = image.getBoundingClientRect();
+              const x = event.clientX - rect.left;
+              const y = event.clientY - rect.top;
+              console.log(`Clicked at coordinates: x=${x}, y=${y}`);
+        
+              // Create a new point div
+              const point = document.createElement('div');
+              point.className = 'point';
+              point.style.left = `${x}px`;
+              point.style.top = `${y}px`;
+        
+              // Append the point to the container
+              const pointsContainer = document.getElementById('pointsContainer');
+              pointsContainer.appendChild(point);
+        
+              // Limit to two points
+              if (pointsContainer.children.length >3) {
+                document.getElementById('img').removeEventListener('click', handleImageClick);
+               // alert("Maximum points reached");
+
+              }
+            }
+        
+            // Add click event listener to the image
+            document.getElementById('img').addEventListener('click', handleImageClick);
+
+            // Function to save the modified image locally
+// Function to save the modified image locally
+function saveImage() {
+    const image = document.getElementById('img');
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    canvas.width = image.width; // Set canvas width to 95 pixels
+    canvas.height = image.height; // Set canvas height to 70 pixels
+
+    // Draw the original image onto the canvas
+    context.drawImage(image, 0, 0, 95, 70); // Draw image with specified dimensions
+
+    // Get the marked points
+    const points = document.querySelectorAll('.point');
+
+    // Calculate scale factors for x and y coordinates
+    const scaleX = canvas.width / image.width;
+    const scaleY = canvas.height / image.height;
+
+    // Draw each point onto the canvas
+    points.forEach(point => {
+        const x = parseInt(point.style.left, 10);
+        const y = parseInt(point.style.top, 10);
+        
+        // Translate coordinates to match canvas dimensions
+        const canvasX = x * scaleX;
+        const canvasY = y * scaleY;
+
+        context.beginPath();
+        context.arc(canvasX, canvasY, 5, 0, Math.PI * 2);
+        context.fillStyle = 'red';
+        context.fill();
+    });
+
+    // Convert canvas to base64 data URL
+    const imageData = canvas.toDataURL();
+
+    // Create a temporary anchor element to trigger download
+    const link = document.createElement('a');
+    link.href = imageData;
+    link.download = 'marked_image.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+
+        </script>
+
+
       
     <script>
         $(document).ready(function() {

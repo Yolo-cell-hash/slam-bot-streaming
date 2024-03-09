@@ -11,25 +11,26 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const socketio = require("socket.io")(server);
-const server_ip = "192.168.238.205";
+const server_ip = "192.168.123.205";
 let receivedFrameData = null;
 let numbersData=[];
 
 let image_path= './room.pgm';
-let convertedImagePath='./public/images/room.jpg';
+let also_img_path='./room.pbm';
+// let convertedImagePath='./public/images/room.jpg';
 
 let img_path='/images/room.jpg';
 
 
-sharp(image_path)
-  .jpeg() 
-  .toFile(convertedImagePath, (err, info) => {
-    if (err) {
-      console.error("Error converting image:", err);
-    } else {
-      console.log("Image converted successfully:", info);
-    }
-  });
+// sharp(also_img_path)
+//   .jpeg() 
+//   .toFile(convertedImagePath, (err, info) => {
+//     if (err) {
+//       console.error("Error converting image:", err);
+//     } else {
+//       console.log("Image converted successfully:", info);
+//     }
+//   });
 
 
 app.use((req, res, next) => {
@@ -41,6 +42,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 
 app.get("/cam-feed", function (req, res) {
   res.render("home");
