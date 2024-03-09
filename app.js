@@ -6,11 +6,12 @@ const fs = require("fs");
 const io = require("socket.io")(http);
 const sharp = require("sharp");
 
+
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const socketio = require("socket.io")(server);
-const server_ip = "192.168.0.109";
+const server_ip = "192.168.238.205";
 let receivedFrameData = null;
 let numbersData=[];
 
@@ -20,9 +21,8 @@ let convertedImagePath='./public/images/room.jpg';
 let img_path='/images/room.jpg';
 
 
-// Convert .pgm image to JPEG
 sharp(image_path)
-  .jpeg() // Convert to JPEG format
+  .jpeg() 
   .toFile(convertedImagePath, (err, info) => {
     if (err) {
       console.error("Error converting image:", err);
