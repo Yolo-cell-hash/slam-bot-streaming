@@ -14,10 +14,10 @@
         /* Styles for the points */
         .point {
           position: absolute;
-          width: 10px; /* Adjust size as needed */
-          height: 10px; /* Adjust size as needed */
-          background-color: red; /* Adjust color as needed */
-          border-radius: 50%; /* To make it round */
+          width: 10px; 
+          height: 10px; 
+          background-color: red;
+          border-radius: 50%;
           z-index: 1000;
         }
       </style>
@@ -36,6 +36,7 @@
 
 
     <div id="there">
+        <h1>2D Map</h1>
         <img height="400px" width="700px" id="image" src="<%=img_path%>" alt="Image" style="display: none;">
         <button id="toggleButton">Show Map</button>
         <button id="updateButton">Update Map</button>
@@ -43,21 +44,25 @@
 
    
       
-
-        <h4>Shortest Path</h4>
+    <div>
+        <h1>Shortest Path</h1>
 
         <div id="pointsContainer" style="z-index: 999; position: relative;">
             <img height="400px" width="700px" id="img" src="<%= img_path%>" alt="Image" style="z-index: 100">
             <div id="coordinatesDisplay"></div>
-            <button id="resetButton">Reset</button>        
+            <button id="resetButton">Reset</button>
+            <button id="submitButton">Submit</button>
+
+            <div style="display: none;" id="hidden_div">
+                <h1>Shortest Path among the Coordinates</h1>
+                <img height="400px" width="700px" id="img_1" src="<%= img_path%>" alt="Shortest Path Map">
+            </div>
+        
             <script>
-                // Array to store clicked coordinates
                 const clickedCoordinates = [];
         
-                // Function to handle click events on the image
                 function handleImageClick(event) {
                     console.log("Image clicked");
-                    // Get the click coordinates relative to the image
                     const image = document.getElementById('img');
                     const rect = image.getBoundingClientRect();
                     const x = event.clientX - rect.left;
@@ -104,15 +109,47 @@
         
                     document.getElementById('img').addEventListener('click', handleImageClick);
                 }
+
+
+        function handleSubmitButtonClick() {
+                if (clickedCoordinates.length === 2) {
+                    const start = clickedCoordinates[0];
+                    const end = clickedCoordinates[1];
+
+                    const coordinates = { start, end };
+
+                fetch('/saveCoordinates', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(coordinates)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Coordinates sent successfully!');
+                        document.getElementById('hidden_div').style.display = 'block';
+                        document.getElementById('img_1').src = '<%= img_path%>';
+                    }
+                    return response.text();
+                })
+                .then(response => response.text())
+
+                .catch(error => console.error('Error:', error));
+            } else {
+                alert('Please select both start and end coordinates before submitting.');
+            }
+        }
+
                 
         
                 document.getElementById('img').addEventListener('click', handleImageClick);
-        
+                document.getElementById('submitButton').addEventListener('click', handleSubmitButtonClick);        
                 document.getElementById('resetButton').addEventListener('click', handleResetButtonClick);
         
             </script>
         </div>
-        
+    </div>    
         
         
         
@@ -159,7 +196,7 @@
     </script>
     
 
-    <!-- <script>
+    <!-- <script> 
     const formattedData = <%- JSON.stringify(numbersData.map(point => ({ label: point.number + '°', value: point.randomNumber })) ) %>;
         var ctx = document.getElementById('radar-chart').getContext('2d');
         var radarChart = new Chart(ctx, {

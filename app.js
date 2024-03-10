@@ -50,7 +50,18 @@ app.get("/receiver", function (req, res) {
   }
 });
 
+app.post('/saveCoordinates', (req, res) => {
+  const coordinates = req.body;
 
+  // Convert coordinates to YAML format
+  const yamlData = `start_coordinate:[${coordinates.start.x},${coordinates.start.y}]
+goal_coordinate:[${coordinates.end.x},${coordinates.end.y}]`;
+
+  // Write YAML data to a file
+  fs.writeFileSync('coordinates.yaml', yamlData);
+
+  res.send('Coordinates saved successfully!');
+});
 
 
 
