@@ -6,32 +6,19 @@ const fs = require("fs");
 const io = require("socket.io")(http);
 const sharp = require("sharp");
 
-
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const socketio = require("socket.io")(server);
-const server_ip = "192.168.123.205";
+const server_ip = "192.168.1.102";
 let receivedFrameData = null;
 let numbersData=[];
 
-let image_path= './room.pgm';
-let also_img_path='./room.pbm';
-// let convertedImagePath='./public/images/room.jpg';
+let image_path= './room_1.pgm';
+let also_img_path='./room.pgm';
+let convertedImagePath='./public/images/room2.jpg';
 
 let img_path='/images/room.jpg';
-
-
-// sharp(also_img_path)
-//   .jpeg() 
-//   .toFile(convertedImagePath, (err, info) => {
-//     if (err) {
-//       console.error("Error converting image:", err);
-//     } else {
-//       console.log("Image converted successfully:", info);
-//     }
-//   });
-
 
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -62,6 +49,11 @@ app.get("/receiver", function (req, res) {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
+
+
+
 
 
 function generateNumbersData() {

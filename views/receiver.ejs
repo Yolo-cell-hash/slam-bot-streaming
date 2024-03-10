@@ -17,7 +17,6 @@
           width: 10px; /* Adjust size as needed */
           height: 10px; /* Adjust size as needed */
           background-color: red; /* Adjust color as needed */
-          color: blue;
           border-radius: 50%; /* To make it round */
           z-index: 1000;
         }
@@ -39,8 +38,8 @@
     <div id="there">
         <img height="400px" width="700px" id="image" src="<%=img_path%>" alt="Image" style="display: none;">
         <button id="toggleButton">Show Map</button>
+        <button id="updateButton">Update Map</button>
     </div>
-    <button id="updateButton">Update Map</button>
 
    
       
@@ -48,11 +47,75 @@
         <h4>Shortest Path</h4>
 
         <div id="pointsContainer" style="z-index: 999; position: relative;">
-            <img height="400px" width="700px" id="img" src="<%= img_path%>" alt="Image"   style="z-index: 100">
-            <button onclick="saveImage()">Save Image</button> 
-
-            
+            <img height="400px" width="700px" id="img" src="<%= img_path%>" alt="Image" style="z-index: 100">
+            <div id="coordinatesDisplay"></div>
+            <button id="resetButton">Reset</button>        
+            <script>
+                // Array to store clicked coordinates
+                const clickedCoordinates = [];
+        
+                // Function to handle click events on the image
+                function handleImageClick(event) {
+                    console.log("Image clicked");
+                    // Get the click coordinates relative to the image
+                    const image = document.getElementById('img');
+                    const rect = image.getBoundingClientRect();
+                    const x = event.clientX - rect.left;
+                    const y = Math.round(event.clientY - rect.top);
+                    console.log(`Clicked at coordinates: x=${x}, y=${y}`);
+        
+                    clickedCoordinates.push({ x, y });
+        
+                    const coordinatesDisplay = document.getElementById('coordinatesDisplay');
+        
+                    if (clickedCoordinates.length === 1) {
+                        const startPoint = clickedCoordinates[0];
+                        const h4Start = document.createElement('h4');
+                        h4Start.textContent = `Start Point: x=${startPoint.x}, y=${startPoint.y}`;
+                        coordinatesDisplay.appendChild(h4Start);
+                    } else if (clickedCoordinates.length === 2) {
+                        const endPoint = clickedCoordinates[1];
+                        const h4End = document.createElement('h4');
+                        h4End.textContent = `End Point: x=${endPoint.x}, y=${endPoint.y}`;
+                        coordinatesDisplay.appendChild(h4End);
+        
+                        document.getElementById('img').removeEventListener('click', handleImageClick);
+                    }
+        
+                    const point = document.createElement('div');
+                    point.className = 'point';
+                    point.style.left = `${x}px`;
+                    point.style.top = `${y}px`;
+        
+                    const pointsContainer = document.getElementById('pointsContainer');
+                    pointsContainer.appendChild(point);
+                }
+        
+                function handleResetButtonClick() {
+                    clickedCoordinates.length = 0;
+        
+                    const coordinatesDisplay = document.getElementById('coordinatesDisplay');
+                    coordinatesDisplay.innerHTML = '';
+        
+                    const dynamicPoints = document.getElementsByClassName('point');
+                    while (dynamicPoints.length > 0) {
+                        dynamicPoints[0].parentNode.removeChild(dynamicPoints[0]);
+                    }
+        
+                    document.getElementById('img').addEventListener('click', handleImageClick);
+                }
+                
+        
+                document.getElementById('img').addEventListener('click', handleImageClick);
+        
+                document.getElementById('resetButton').addEventListener('click', handleResetButtonClick);
+        
+            </script>
         </div>
+        
+        
+        
+        
 
 
 
@@ -62,86 +125,7 @@
 
         
 
-        <script>
-            // Function to handle click events on the image
-            function handleImageClick(event) {
-              console.log("Image clicked");
-              // Get the click coordinates relative to the image
-              const image = document.getElementById('img');
-              const rect = image.getBoundingClientRect();
-              const x = event.clientX - rect.left;
-              const y = event.clientY - rect.top;
-              console.log(`Clicked at coordinates: x=${x}, y=${y}`);
         
-              // Create a new point div
-              const point = document.createElement('div');
-              point.className = 'point';
-              point.style.left = `${x}px`;
-              point.style.top = `${y}px`;
-        
-              // Append the point to the container
-              const pointsContainer = document.getElementById('pointsContainer');
-              pointsContainer.appendChild(point);
-        
-              // Limit to two points
-              if (pointsContainer.children.length >3) {
-                document.getElementById('img').removeEventListener('click', handleImageClick);
-               // alert("Maximum points reached");
-
-              }
-            }
-        
-            // Add click event listener to the image
-            document.getElementById('img').addEventListener('click', handleImageClick);
-
-            // Function to save the modified image locally
-// Function to save the modified image locally
-function saveImage() {
-    const image = document.getElementById('img');
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    canvas.width = image.width; // Set canvas width to 95 pixels
-    canvas.height = image.height; // Set canvas height to 70 pixels
-
-    // Draw the original image onto the canvas
-    context.drawImage(image, 0, 0, 95, 70); // Draw image with specified dimensions
-
-    // Get the marked points
-    const points = document.querySelectorAll('.point');
-
-    // Calculate scale factors for x and y coordinates
-    const scaleX = canvas.width / image.width;
-    const scaleY = canvas.height / image.height;
-
-    // Draw each point onto the canvas
-    points.forEach(point => {
-        const x = parseInt(point.style.left, 10);
-        const y = parseInt(point.style.top, 10);
-        
-        // Translate coordinates to match canvas dimensions
-        const canvasX = x * scaleX;
-        const canvasY = y * scaleY;
-
-        context.beginPath();
-        context.arc(canvasX, canvasY, 5, 0, Math.PI * 2);
-        context.fillStyle = 'red';
-        context.fill();
-    });
-
-    // Convert canvas to base64 data URL
-    const imageData = canvas.toDataURL();
-
-    // Create a temporary anchor element to trigger download
-    const link = document.createElement('a');
-    link.href = imageData;
-    link.download = 'marked_image.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-
-        </script>
 
 
       
@@ -175,7 +159,7 @@ function saveImage() {
     </script>
     
 
-    <script>
+    <!-- <script>
     const formattedData = <%- JSON.stringify(numbersData.map(point => ({ label: point.number + '°', value: point.randomNumber })) ) %>;
         var ctx = document.getElementById('radar-chart').getContext('2d');
         var radarChart = new Chart(ctx, {
@@ -191,7 +175,7 @@ function saveImage() {
                 }]
             },
         });
-    </script>
+    </script> -->
 
 
     <script>
