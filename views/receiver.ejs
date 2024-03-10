@@ -43,7 +43,7 @@
     </div>
 
    
-      
+      i
     <div>
         <h1>Shortest Path</h1>
 
@@ -55,7 +55,7 @@
 
             <div style="display: none;" id="hidden_div">
                 <h1>Shortest Path among the Coordinates</h1>
-                <img height="400px" width="700px" id="img_1" src="<%= img_path%>" alt="Shortest Path Map">
+                <img height="400px" width="700px" id="img_1" src="<%= algo_map_path%>" alt="Shortest Path Map">
             </div>
         
             <script>
@@ -129,7 +129,7 @@
                     if (response.ok) {
                         alert('Coordinates sent successfully!');
                         document.getElementById('hidden_div').style.display = 'block';
-                        document.getElementById('img_1').src = '<%= img_path%>';
+                        document.getElementById('img_1').src = '<%= algo_map_path%>';
                     }
                     return response.text();
                 })

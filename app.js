@@ -14,11 +14,8 @@ const server_ip = "192.168.1.102";
 let receivedFrameData = null;
 let numbersData=[];
 
-let image_path= './room_1.pgm';
-let also_img_path='./room.pgm';
-let convertedImagePath='./public/images/room2.jpg';
-
 let img_path='/images/room.jpg';
+let algo_map_path='/images/algo-map.jpeg';
 
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -43,7 +40,7 @@ app.get("/", function (req, res) {
 app.get("/receiver", function (req, res) {
   try {
     const numbersData = generateNumbersData();
-    res.render("receiver", { imageData: receivedFrameData, numbersData: numbersData , img_path: img_path});
+    res.render("receiver", { imageData: receivedFrameData, numbersData: numbersData , img_path: img_path, algo_map_path: algo_map_path});
   } catch (error) {
     console.error("Error rendering template:", error);
     res.status(500).send("Internal Server Error");
