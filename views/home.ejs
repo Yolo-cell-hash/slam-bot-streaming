@@ -2,9 +2,19 @@
 
 <!-- home.ejs -->
 <body>
-    <h1>Camera Feed</h1>
-    <button id="startButton">Start Camera</button>
-    <video id="videoElement" style="display: none;" autoplay></video>
+
+    <div class="cam-feed-enabler">
+        <h1 class="cam-header">Camera Feed</h1>
+
+        <button style="width: 20%;"  id="startButton" type="submit" class=" btn btn-lg cam_button">
+            <span class="button__text">Start Camera</span>
+            <i class="button__icon fas fa-camera"></i>
+        </button>
+
+        <div class="vd-plyr">
+            <video id="videoElement" style="display: none; border-radius: 16px;box-shadow: 0px 0px 24px #5C5696;" autoplay></video>
+        </div>
+    </div>
 
     <script>
         const startButton = document.getElementById('startButton');
