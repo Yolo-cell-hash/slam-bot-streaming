@@ -275,6 +275,29 @@
     font-size: 45px;
 }
 
+.points_display{
+    font-weight: 500;
+    font-size: 20px;
+    color: black;
+    margin: 10px 0px;
+}
+
+#coordinatesDisplay{
+    background-color: #fff;
+    padding: 10px 20px;
+    width: 18%;
+    border-radius: 16px;
+    display: block;
+}
+
+.show_div{
+    background-color: #fff;
+    padding: 10px 20px;
+    width: 18%;
+    border-radius: 16px;
+    display: block;
+}
+
 
 @media(max-width: 600px) {
 

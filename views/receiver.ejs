@@ -105,11 +105,13 @@
                         const startPoint = clickedCoordinates[0];
                         const h4Start = document.createElement('h4');
                         h4Start.textContent = `Start Point: x=${startPoint.x}, y=${startPoint.y}`;
+                        h4Start.classList.add('points_display');
                         coordinatesDisplay.appendChild(h4Start);
                     } else if (clickedCoordinates.length === 2) {
                         const endPoint = clickedCoordinates[1];
                         const h4End = document.createElement('h4');
                         h4End.textContent = `End Point: x=${endPoint.x}, y=${endPoint.y}`;
+                        h4End.classList.add('points_display');
                         coordinatesDisplay.appendChild(h4End);
         
                         document.getElementById('img').removeEventListener('click', handleImageClick);
@@ -257,7 +259,6 @@
 
 </body>
 </html>
-
 
 
 
