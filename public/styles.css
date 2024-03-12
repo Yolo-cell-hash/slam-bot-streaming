@@ -1,10 +1,15 @@
 
 /* Path: public/index.html */
         * {
-            box-sizing: border-box;
+            /* box-sizing: border-box; */
             margin: 0;
             padding: 0;
             font-family: Raleway, sans-serif;
+        }
+
+        h1{
+            padding: 0;
+            margin: 0;
         }
 
         body {
@@ -208,9 +213,85 @@
 .cam-feed-enabler{
     padding: 50px;
 }
-/* 
+
+.cam-feed-enabler-1{
+    padding: 35px 0;
+}
+
 .vd-plyr{
     border-radius: 16px;
     box-shadow: 0px 0px 24px #5C5696;
     width: fit-content;
-} */
+}
+
+/* receiver.ejs */
+
+#here {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.enabler-btns{
+    background: #fff;
+    color: #4C489D;
+    font-size: 14px;
+    margin-top: 15px;
+    margin-bottom: 40px;
+    padding: 16px 20px;
+    border-radius: 26px;
+    border: 1px solid #D4D3E8;
+    text-transform: uppercase;
+    font-weight: 700;
+    box-shadow: 0px 2px 2px #5C5696;
+    cursor: pointer;
+    transition: .2s;
+    margin-right: 25px;
+}
+
+.vid-stream-width{
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.map-display{
+    margin: 20px 0px;
+    box-shadow: 0px 0px 24px #5C5696;
+    width: fit-content;
+}
+
+.disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
+
+.receiver_header{
+    color:black ;
+    margin: 1.5rem auto;
+    font-weight: 500;
+    font-size: 45px;
+}
+
+
+@media(max-width: 600px) {
+
+
+    .vid-stream-width{
+        width: 120%;
+        height: auto;
+        object-fit: contain;
+    }
+
+    .enabler-btns{
+        display: inline;
+    }
+
+   
+
+
+
+
+}

@@ -4,16 +4,13 @@
 <body>
 
     <div class="cam-feed-enabler">
-        <h1 class="cam-header">Camera Feed</h1>
+        <h1>Camera Feed</h1>
 
         <button style="width: 20%;"  id="startButton" type="submit" class=" btn btn-lg cam_button">
-            <span class="button__text">Start Camera</span>
+            <span class="button__text">Start Camera </span>
             <i class="button__icon fas fa-camera"></i>
         </button>
-
-        <div class="vd-plyr">
-            <video id="videoElement" style="display: none; border-radius: 16px;box-shadow: 0px 0px 24px #5C5696;" autoplay></video>
-        </div>
+        <video id="videoElement" style="display: none; border-radius: 16px;box-shadow: 0px 0px 24px #5C5696;" autoplay></video>
     </div>
 
     <script>
@@ -32,7 +29,7 @@
                     stream = videoStream;
                     video.srcObject = stream;
                     video.style.display = 'block';
-                    ws = new WebSocket('ws://192.168.1.101:3000'); // Establish WebSocket connection
+                    ws = new WebSocket('ws://192.168.1.100:3000'); // Establish WebSocket connection
                     ws.onopen = () => {
                         console.log('WebSocket connection established');
                     };

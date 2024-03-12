@@ -1,11 +1,20 @@
 
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    
+    <script src="https://kit.fontawesome.com/8e7cdbc65b.js" crossorigin="anonymous"></script>
+
 
     <title>SLAM-BOT</title>
     <link rel="stylesheet" href="/styles.css">
@@ -24,10 +33,9 @@
 
 </head>
 <body>
-
-   <h1>Camera Feed</h1>
-   <div id="here">
-        <img src="<%= imageData %>" alt="frame">
+    <div id="here"  class="cam-feed-enabler-1">
+        <h1 class="receiver_header">Camera Feed</h1>
+        <img class="vid-plyr vid-stream-width" src="<%= imageData %>" alt="frame">
     </div>
     
     <!-- <div id="also_here">
@@ -35,24 +43,46 @@
     </div> -->
 
 
-    <div id="there">
-        <h1>2D Map</h1>
-        <img height="400px" width="700px" id="image" src="<%=img_path%>" alt="Image" style="display: none;">
-        <button id="toggleButton">Show Map</button>
-        <button id="updateButton">Update Map</button>
+    <div id="there" class="cam-feed-enabler">
+        <h1 class="receiver_header">2D-Map</h1>
+        <div>
+            <img class="map-display" height="400px" width="700px" id="image" src="<%=img_path%>" alt="Image" style="display: none;">
+        </div>
+        <button class="btn btn-lg enabler-btns" id="toggleButton"> 
+            <span class="button__text">Show Map </span>
+            <i class="button__icon fas fa-map"></i>
+        </button>
+
+        <!-- <button id="updateButton"> Update Map</button> -->
+        <button id="updateButton" class="enabler-btns">
+            <span class="button__text">Update Map </span>
+            <i class="button__icon fas fa-check"></i>        
+        </button>
     </div>
 
-    <div>
-        <h1>Shortest Path</h1>
+    <div class="cam-feed-enabler">
+        <h1 class="receiver_header">Shortest Path</h1>
 
         <div id="pointsContainer" style="z-index: 999; position: relative;">
-            <img height="400px" width="700px" id="img" src="<%= img_path%>" alt="Image" style="z-index: 100">
+            <div>
+                <img class="map-display"  height="400px" width="700px" id="img" src="<%= img_path%>" alt="Image" style="z-index: 100">
+            </div>
             <div id="coordinatesDisplay"></div>
-            <button id="resetButton">Reset</button>
-            <button id="submitButton">Submit</button>
 
-            <div style="display: none;" id="hidden_div">
-                <h1>Shortest Path among the Coordinates</h1>
+            <button class="btn btn-lg enabler-btns" id="resetButton"> 
+                <span class="button__text">Reset </span>
+                <i class="button__icon fas fa-eraser"></i>
+            </button>
+
+            <!-- <button id="submitButton">Submit</button> -->
+
+            <button class="btn btn-lg enabler-btns" id="submitButton"> 
+                <span class="button__text">Submit </span>
+                <i class="button__icon fas fa-paper-plane"></i>            
+            </button>
+
+            <div style="display: none;" class="vid-plyr" id="hidden_div">
+                <h1 class="receiver_header">Shortest Path among the Coordinates</h1>
                 <img height="400px" width="700px" id="img_1" src="<%= algo_map_path%>" alt="Shortest Path Map">
             </div>
         
@@ -163,15 +193,17 @@
         
 
 
-      
-    <script>
-        $(document).ready(function() {
-    $('#toggleButton').click(function() {
-        $('#image').toggle();
+<script>
+    $(document).ready(function() {
+        $('#toggleButton').click(function() {
+            if ($('#image').css('display') == 'none') {
+                $('#image').css('display', 'block');
+            } else {
+                $('#image').css('display', 'none');
+            }
+        });
     });
-    });
-
-    </script>
+</script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -182,10 +214,12 @@
             updateButton.addEventListener("click", function() {
                 if (!cooldownInProgress) {
                     cooldownInProgress = true;    
-                    updateButton.disabled = true;    
+                    updateButton.disabled = true;
+                    updateButton.classList.add('disabled'); // Add the disabled class
                     image.src = '<%=img_path %>';
-                        setTimeout(function() {
+                    setTimeout(function() {
                         updateButton.disabled = false;
+                        updateButton.classList.remove('disabled'); // Remove the disabled class
                         cooldownInProgress = false; 
                     }, 15000);
                 }
