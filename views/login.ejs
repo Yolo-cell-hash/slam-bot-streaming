@@ -1,18 +1,36 @@
 <%- include('partials/header') %>
 <body>
-    <form method="post" action="/">
-        <div class="brand-logo"></div>
-        <div class="brand-title">Login</div>
-      
-        <div class="inputs">
+      <div class="container_1">
+        <div class="screen">
+            <div class="screen__content">
+                <form method="post" action="/">
+                    <div class="login">
+                        <h2 class="login_header">Log-in</h2>
+                        <div class="login__field">
+                            <i class="login__icon fas fa-user"></i>
+                            <input name="username" type="text" class="login__input" placeholder="User name / Email">
+                        </div>
+                        <div class="login__field">
+                            <i class="login__icon fas fa-lock"></i>
+                            <input name="pass" type="password" class="login__input" placeholder="Password">
+                        </div>
+                        <button type="submit" class="button login__submit">
+                            <span class="button__text">Connect</span>
+                            <i class="button__icon fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="screen__background">
+                <span class="screen__background__shape screen__background__shape4"></span>
+                <span class="screen__background__shape screen__background__shape3"></span>
+                <span class="screen__background__shape screen__background__shape2"></span>
+                <span class="screen__background__shape screen__background__shape1"></span>
+            </div>
+        </div>
+    </div>
 
-          <label>Username</label>
-          <input name="username" type="text" placeholder="" />
 
-          <label >Password</label>
-          <input name="pass" placeholder="" type="password">
-
-          <button type="submit">Connect</button>
-      </form>  
+    
 </body>
 <%- include('partials/footer') %>
