@@ -23,10 +23,19 @@
         /* Styles for the points */
         .point {
           position: absolute;
-          width: 10px; 
-          height: 10px; 
-          background-color: pink;
-          border-radius: 50%;
+          width: 30px; 
+          height: 30px; 
+          background-image: url('/images/flag.png');
+          background-size: cover;
+          z-index: 1000;
+        }
+
+        .point2{
+          position: absolute;
+          width: 30px; 
+          height: 30px; 
+          background-image: url('/images/red-flag.png');
+          background-size: cover;
           z-index: 1000;
         }
       </style>
@@ -42,39 +51,24 @@
         <canvas id="radar-chart"></canvas>
     </div> -->
 
-
-    <div id="there" class="cam-feed-enabler">
-        <h1 class="receiver_header">2D-Map</h1>
-        <div>
-            <img class="map-display"  height="<%= imageHeight%>" width="<%=imageWidth%>" id="image" src="<%=img_path%>" alt="Image" style="display: none;">
-        </div>
-        <button class="btn btn-lg enabler-btns" id="toggleButton"> 
-            <span class="button__text">Show Map </span>
-            <i class="button__icon fas fa-map"></i>
-        </button>
-
-        <!-- <button id="updateButton"> Update Map</button> -->
-        <button id="updateButton" class="enabler-btns">
-            <span class="button__text">Update Map </span>
-            <i class="button__icon fas fa-check"></i>        
-        </button>
-    </div>
-
     <div class="cam-feed-enabler">
         <h1 class="receiver_header">Shortest Path</h1>
 
         <div id="pointsContainer" style="z-index: 999; position: relative;">
             <div class="pad-sides">
-                <img class="map-display" height="<%= imageHeight%>" width="<%=imageWidth%>" id="img" src="<%= img_path%>" alt="Image" style="z-index: 100">
+                <img class="map-display" height="<%= imageHeight%>" width="<%=imageWidth%>" id="img" src="<%= img_path%>" alt="Image" style="z-index: 100; display: none;">
             </div>
-            <div id="coordinatesDisplay"></div>
+            <div id="coordinatesDisplay" style="display: none;" ></div>
+
+            <button class="enabler-btns" id="toggleButton"> 
+                <span class="button__text">Show Map </span>
+                <i class="button__icon fas fa-map"></i>
+            </button>
 
             <button class="btn btn-lg enabler-btns" id="resetButton"> 
                 <span class="button__text">Reset </span>
                 <i class="button__icon fas fa-eraser"></i>
             </button>
-
-            <!-- <button id="submitButton">Submit</button> -->
 
             <button class="btn btn-lg enabler-btns" id="submitButton"> 
                 <span class="button__text">Submit </span>
@@ -98,27 +92,50 @@
                     console.log(`Clicked at coordinates: x=${x}, y=${y}`);
         
                     clickedCoordinates.push({ x, y });
-        
-                    const coordinatesDisplay = document.getElementById('coordinatesDisplay');
-        
+                
                     if (clickedCoordinates.length === 1) {
                         const startPoint = clickedCoordinates[0];
                         const h4Start = document.createElement('h4');
                         h4Start.textContent = `Start Point: x=${startPoint.x}, y=${startPoint.y}`;
                         h4Start.classList.add('points_display');
+                        document.getElementById('coordinatesDisplay').style.display = 'block';
                         coordinatesDisplay.appendChild(h4Start);
                     } else if (clickedCoordinates.length === 2) {
                         const endPoint = clickedCoordinates[1];
                         const h4End = document.createElement('h4');
                         h4End.textContent = `End Point: x=${endPoint.x}, y=${endPoint.y}`;
                         h4End.classList.add('points_display');
+                        document.getElementById('coordinatesDisplay').style.display = 'block';
                         coordinatesDisplay.appendChild(h4End);
         
                         document.getElementById('img').removeEventListener('click', handleImageClick);
                     }
         
+
+                    if(clickedCoordinates.length === 1){
+                        const point = document.createElement('div');
+                        point.className = 'point2';
+                        point.style.left = `${x}px`;
+                        point.style.top = `${y}px`;
+            
+                        const pointsContainer = document.getElementById('pointsContainer');
+                        pointsContainer.appendChild(point);
+                    }
+                    else if(clickedCoordinates.length === 2){
+                        const point = document.createElement('div');
+                        point.className = 'point';
+                        point.style.left = `${x}px`;
+                        point.style.top = `${y}px`;
+            
+                        const pointsContainer = document.getElementById('pointsContainer');
+                        pointsContainer.appendChild(point);
+                    }
+
+
+
+
                     const point = document.createElement('div');
-                    point.className = 'point';
+                   // point.className = 'point';
                     point.style.left = `${x}px`;
                     point.style.top = `${y}px`;
         
@@ -131,10 +148,17 @@
         
                     const coordinatesDisplay = document.getElementById('coordinatesDisplay');
                     coordinatesDisplay.innerHTML = '';
+                    document.getElementById('coordinatesDisplay').style.display = 'none';
+
         
                     const dynamicPoints = document.getElementsByClassName('point');
+                    const dynamicPoints2 = document.getElementsByClassName('point2');
                     while (dynamicPoints.length > 0) {
                         dynamicPoints[0].parentNode.removeChild(dynamicPoints[0]);
+                    }
+
+                    while (dynamicPoints2.length > 0) {
+                        dynamicPoints2[0].parentNode.removeChild(dynamicPoints2[0]);
                     }
         
                     document.getElementById('img').addEventListener('click', handleImageClick);
@@ -195,7 +219,7 @@
         
 
 
-<script>
+<!-- <script>
     $(document).ready(function() {
         $('#toggleButton').click(function() {
             if ($('#image').css('display') == 'none') {
@@ -204,6 +228,33 @@
                 $('#image').css('display', 'none');
             }
         });
+    });
+</script> -->
+
+
+<script>
+    document.getElementById('toggleButton').addEventListener('click', function() {
+        const mapImage = document.getElementById('img');
+
+        const toggleButton = document.getElementById('toggleButton');
+        const points = document.querySelectorAll('.point, .point2'); // Select all points
+
+        if (mapImage.style.display === 'none') {
+            mapImage.style.display = 'block';
+            toggleButton.innerHTML = '<span class="button__text">Hide Map </span><i class="button__icon fas fa-map"></i>';
+
+            points.forEach(function(point) {
+                point.style.display = 'block';
+            });
+            
+        } else {
+            mapImage.style.display = 'none';
+            toggleButton.innerHTML = '<span class="button__text">Show Map </span><i class="button__icon fas fa-map"></i>';
+
+            points.forEach(function(point) {
+                point.style.display = 'none';
+            });
+        }
     });
 </script>
 

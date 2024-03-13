@@ -288,7 +288,7 @@
 #coordinatesDisplay{
     background-color: #fff;
     padding: 10px 20px;
-    width: 18%;
+    width: fit-content;
     border-radius: 16px;
     display: block;
 }
