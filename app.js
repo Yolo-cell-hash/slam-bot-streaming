@@ -112,7 +112,7 @@ app.post("/", function (req, res) {
   const password = req.body.pass;
   const clientIP = req.ip;
 
-  if (username === "admin" && password === "ET132") {
+  if (username === "et132" && password === "et132") {
     if (clientIP === server_ip) {
       res.redirect("/cam-feed");
     } else {
