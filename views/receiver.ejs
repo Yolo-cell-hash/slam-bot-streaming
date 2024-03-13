@@ -60,7 +60,7 @@
         <div id="pointsContainer" style="z-index: 999; position: relative;">
             <div class="pad-sides">
                 <img class="map-display" height="<%= imageHeight%>" width="<%=imageWidth%>" id="img" src="<%= img_path%>" alt="Image" style="z-index: 100; display: none;">
-            </div>
+            
             <div id="coordinatesDisplay" style="display: none;" ></div>
 
             <button class="enabler-btns" id="toggleButton"> 
@@ -77,12 +77,13 @@
                 <span class="button__text">Submit </span>
                 <i class="button__icon fas fa-paper-plane"></i>            
             </button>
+            </div>
 
             <div style="display: none;" class="vid-plyr" id="hidden_div">
                 <h1 class="receiver_header">Shortest Path among the Coordinates</h1>
                 <img height="<%= imageHeight%>" width="<%=imageWidth%>" id="img_1" src="<%= algo_map_path%>" alt="Shortest Path Map">
             </div>
-        
+
             <script>
                 const clickedCoordinates = [];
         
@@ -210,7 +211,6 @@
         
         
         
-
 
 
 

@@ -5,13 +5,13 @@ const path = require("path");
 const fs = require("fs");
 const io = require("socket.io")(http);
 const sharp = require("sharp");
+const os = require('os');
 const { log } = require("console");
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const socketio = require("socket.io")(server);
-const server_ip = "192.168.1.100";
 let receivedFrameData = null;
 let numbersData=[];
 
@@ -32,6 +32,22 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+function getServerIP() {
+  const interfaces = os.networkInterfaces();
+
+  for (const name of Object.keys(interfaces)) {
+      for (const interface of interfaces[name]) {
+          const {address, family, internal} = interface;
+
+          if (family === 'IPv4' && !internal) {
+              return address;
+          }
+      }
+  }
+  return 'localhost';
+}
+
+const server_ip = getServerIP();
 
 sharp(imagePath)
   .metadata()
@@ -47,7 +63,7 @@ sharp(imagePath)
 
 
 app.get("/cam-feed", function (req, res) {
-  res.render("home");
+  res.render("home",{server_ip: server_ip});
 });
 
 app.get("/", function (req, res) {

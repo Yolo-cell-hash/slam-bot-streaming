@@ -291,6 +291,12 @@
     width: fit-content;
     border-radius: 16px;
     display: block;
+    margin-top: 35px;
+    margin-bottom: 15px;
+}
+
+#img_1{
+    box-shadow: 0px 0px 24px #5C5696;
 }
 
 .show_div{
