@@ -52,7 +52,6 @@ const server_ip = getServerIP();
 sharp(imagePath)
   .metadata()
   .then(metadata => {
-    // Metadata object will contain the image width and height
     const { width, height } = metadata;
     imageHeight=1*height;
     imageWidth=1*width;
@@ -84,11 +83,9 @@ app.get("/receiver", function (req, res) {
 app.post('/saveCoordinates', (req, res) => {
   const coordinates = req.body;
 
-  // Convert coordinates to YAML format
   const yamlData = `start_coordinate: [${coordinates.start.x},${coordinates.start.y}]
 goal_coordinate: [${coordinates.end.x},${coordinates.end.y}]`;
 
-  // Write YAML data to a file
   fs.writeFileSync('coordinates.yaml', yamlData);
 
   res.send('Coordinates saved successfully!');
