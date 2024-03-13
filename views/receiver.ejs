@@ -25,7 +25,7 @@
           position: absolute;
           width: 10px; 
           height: 10px; 
-          background-color: red;
+          background-color: pink;
           border-radius: 50%;
           z-index: 1000;
         }
@@ -46,7 +46,7 @@
     <div id="there" class="cam-feed-enabler">
         <h1 class="receiver_header">2D-Map</h1>
         <div>
-            <img class="map-display" height="400px" width="700px" id="image" src="<%=img_path%>" alt="Image" style="display: none;">
+            <img class="map-display"  height="<%= imageHeight%>" width="<%=imageWidth%>" id="image" src="<%=img_path%>" alt="Image" style="display: none;">
         </div>
         <button class="btn btn-lg enabler-btns" id="toggleButton"> 
             <span class="button__text">Show Map </span>
@@ -64,8 +64,8 @@
         <h1 class="receiver_header">Shortest Path</h1>
 
         <div id="pointsContainer" style="z-index: 999; position: relative;">
-            <div>
-                <img class="map-display"  height="400px" width="700px" id="img" src="<%= img_path%>" alt="Image" style="z-index: 100">
+            <div class="pad-sides">
+                <img class="map-display" height="<%= imageHeight%>" width="<%=imageWidth%>" id="img" src="<%= img_path%>" alt="Image" style="z-index: 100">
             </div>
             <div id="coordinatesDisplay"></div>
 
@@ -83,7 +83,7 @@
 
             <div style="display: none;" class="vid-plyr" id="hidden_div">
                 <h1 class="receiver_header">Shortest Path among the Coordinates</h1>
-                <img height="400px" width="700px" id="img_1" src="<%= algo_map_path%>" alt="Shortest Path Map">
+                <img height="<%= imageHeight%>" width="<%=imageWidth%>" id="img_1" src="<%= algo_map_path%>" alt="Shortest Path Map">
             </div>
         
             <script>
@@ -93,7 +93,7 @@
                     console.log("Image clicked");
                     const image = document.getElementById('img');
                     const rect = image.getBoundingClientRect();
-                    const x = event.clientX - rect.left;
+                    const x = Math.round(event.clientX - rect.left);
                     const y = Math.round(event.clientY - rect.top);
                     console.log(`Clicked at coordinates: x=${x}, y=${y}`);
         

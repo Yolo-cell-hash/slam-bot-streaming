@@ -257,8 +257,11 @@
     object-fit: contain;
 }
 
-.map-display{
+.pad-sides{
     margin: 20px 0px;
+}
+
+.map-display{
     box-shadow: 0px 0px 24px #5C5696;
     width: fit-content;
 }

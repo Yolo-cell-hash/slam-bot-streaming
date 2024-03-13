@@ -5,17 +5,22 @@ const path = require("path");
 const fs = require("fs");
 const io = require("socket.io")(http);
 const sharp = require("sharp");
+const { log } = require("console");
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const socketio = require("socket.io")(server);
-const server_ip = "192.168.1.100";
+const server_ip = "192.168.238.205";
 let receivedFrameData = null;
 let numbersData=[];
 
-let img_path='/images/room.jpg';
-let algo_map_path='/images/algo-map.jpeg';
+let img_path='/images/room.jpeg';
+let algo_map_path='/images/map-with-algo.png';
+
+
+let imagePath='./public/images/room.jpeg';
+var imageHeight, imageWidth;
 
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -26,6 +31,21 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+
+sharp(imagePath)
+  .metadata()
+  .then(metadata => {
+    // Metadata object will contain the image width and height
+    const { width, height } = metadata;
+    imageHeight=1*height;
+    imageWidth=1*width;
+    console.log(`Image width: ${width}px, height: ${height}px`);
+    console.log(imageWidth+'px is width &'+imageHeight+' px is height.'  );
+  })
+  .catch(err => {
+    console.error('Error:', err);
+  });
 
 
 app.get("/cam-feed", function (req, res) {
@@ -40,7 +60,7 @@ app.get("/", function (req, res) {
 app.get("/receiver", function (req, res) {
   try {
     const numbersData = generateNumbersData();
-    res.render("receiver", { imageData: receivedFrameData, numbersData: numbersData , img_path: img_path, algo_map_path: algo_map_path});
+    res.render("receiver", { imageData: receivedFrameData, numbersData: numbersData , img_path: img_path, algo_map_path: algo_map_path,imageHeight:imageHeight,imageWidth:imageWidth});
   } catch (error) {
     console.error("Error rendering template:", error);
     res.status(500).send("Internal Server Error");
