@@ -11,7 +11,7 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const socketio = require("socket.io")(server);
-const server_ip = "192.168.238.205";
+const server_ip = "192.168.1.100";
 let receivedFrameData = null;
 let numbersData=[];
 
@@ -40,8 +40,6 @@ sharp(imagePath)
     const { width, height } = metadata;
     imageHeight=1*height;
     imageWidth=1*width;
-    console.log(`Image width: ${width}px, height: ${height}px`);
-    console.log(imageWidth+'px is width &'+imageHeight+' px is height.'  );
   })
   .catch(err => {
     console.error('Error:', err);
@@ -71,8 +69,8 @@ app.post('/saveCoordinates', (req, res) => {
   const coordinates = req.body;
 
   // Convert coordinates to YAML format
-  const yamlData = `start_coordinate:[${coordinates.start.x},${coordinates.start.y}]
-goal_coordinate:[${coordinates.end.x},${coordinates.end.y}]`;
+  const yamlData = `start_coordinate: [${coordinates.start.x},${coordinates.start.y}]
+goal_coordinate: [${coordinates.end.x},${coordinates.end.y}]`;
 
   // Write YAML data to a file
   fs.writeFileSync('coordinates.yaml', yamlData);
