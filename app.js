@@ -15,11 +15,11 @@ const socketio = require("socket.io")(server);
 let receivedFrameData = null;
 let numbersData=[];
 
-let img_path='/images/room.jpeg';
-let algo_map_path='/images/map-with-algo.png';
+let img_path='/images/mapped_area.png';
+let algo_map_path='/images/shortest_path_map.png';
 
 
-let imagePath='./public/images/room.jpeg';
+let imagePath='./public/images/mapped_area.png';
 var imageHeight, imageWidth;
 
 app.use((req, res, next) => {
