@@ -164,6 +164,11 @@
                     while (dynamicPoints2.length > 0) {
                         dynamicPoints2[0].parentNode.removeChild(dynamicPoints2[0]);
                     }
+
+                    const hidden_div=document.getElementById('hidden_div');
+                    if(hidden_div){
+                        hidden_div.style.display = 'none';
+                    }
         
                     document.getElementById('img').addEventListener('click', handleImageClick);
                 }
